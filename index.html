@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kobe's Consent Quest</title>
+<style>
+    body {
+        background-color: black;
+        color: #f07e13;
+        font-family: "Courier New", Courier, monospace;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    #consentForm {
+        padding: 20px;
+        background-color: black;
+    }
+
+    #consentForm legend {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    #consentForm p {
+        margin-bottom: 15px;
+    }
+
+    #consentForm input[type="checkbox"] {
+        margin-right: 10px;
+    }
+
+    #consentForm label {
+        display: inline-block;
+    }
+
+    #consentForm button {
+        background-color: #f07e13;
+        color: black;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    #consentForm button:hover {
+        background-color: #f07e13;
+    }
+
+    .wrapper {
+        display:grid;
+    }
+
+    #game-container {
+        width: 600px; /* Adjusted to fit the 15x15 grid */
+        height: 600px; /* Adjusted to fit the 15x15 grid */
+        border: 2px solid black;
+        position: relative;
+        background-image: url('assets/img/background.png'); /* Path to your background image */
+        background-size: cover;
+    }
+
+    .character {
+        width: 40px;
+        height: 40px;
+        background-image: url('assets/img/charKobe40.png'); /* Path to your background image */
+        position: absolute;
+    }
+</style>
+</head>
+<body>
+
+<div class="container" id="startGame">
+    <h1 id="startText" style="cursor: pointer;">Click to start the game</h1>
+</div>
+
+<div class="container" id="nextText" style="display: none;">
+    <pre>
+        ██╗  ██╗ ██████╗ ██████╗ ███████╗███████╗     ██████╗ ██████╗ ███╗   ██╗███████╗███████╗███╗   ██╗████████╗     ██████╗ ██╗   ██╗███████╗███████╗████████╗
+        ██║ ██╔╝██╔═══██╗██╔══██╗██╔════╝██╔════╝    ██╔════╝██╔═══██╗████╗  ██║██╔════╝██╔════╝████╗  ██║╚══██╔══╝    ██╔═══██╗██║   ██║██╔════╝██╔════╝╚══██╔══╝
+        █████╔╝ ██║   ██║██████╔╝█████╗  ███████╗    ██║     ██║   ██║██╔██╗ ██║███████╗█████╗  ██╔██╗ ██║   ██║       ██║   ██║██║   ██║█████╗  ███████╗   ██║   
+        ██╔═██╗ ██║   ██║██╔══██╗██╔══╝  ╚════██║    ██║     ██║   ██║██║╚██╗██║╚════██║██╔══╝  ██║╚██╗██║   ██║       ██║▄▄ ██║██║   ██║██╔══╝  ╚════██║   ██║   
+        ██║  ██╗╚██████╔╝██████╔╝███████╗███████║    ╚██████╗╚██████╔╝██║ ╚████║███████║███████╗██║ ╚████║   ██║       ╚██████╔╝╚██████╔╝███████╗███████║   ██║   
+        ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝╚══════╝     ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝        ╚══▀▀═╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝   
+        
+        
+         _                     _   _                      _           _         ____      _        _ _   _                    _ 
+        | |    ___  __ _  __ _| | | |    __ _ _   _  __ _| |__  ___  (_)_ __   |  _ \ ___| |_ __ _(_) | | |    __ _ _ __   __| |
+        | |   / _ \/ _` |/ _` | | | |   / _` | | | |/ _` | '_ \/ __| | | '_ \  | |_) / _ \ __/ _` | | | | |   / _` | '_ \ / _` |
+        | |__|  __/ (_| | (_| | | | |__| (_| | |_| | (_| | | | \__ \ | | | | | |  _ <  __/ || (_| | | | | |__| (_| | | | | (_| |
+        |_____\___|\__, |\__,_|_| |_____\__,_|\__,_|\__, |_| |_|___/ |_|_| |_| |_| \_\___|\__\__,_|_|_| |_____\__,_|_| |_|\__,_|
+                   |___/                            |___/                                                                       
+        </pre>
+    
+        <div id="intro" style="width:70em;"><p>Step into the shoes of Kobe, the witty lawyer with a passion for customer marketing and a knack for cracking jokes. In this retro adventure set in the bustling world of retail, Kobe takes on the challenge of building a legal framework around consent for using customer data. Join him on his quest as he navigates through humorous encounters, clever legal puzzles, and unexpected twists, all while striving to ensure that customer rights are upheld with a smile. Embark on Kobe's Consent Quest and discover a world where law meets laughter in the most unexpected of places!</p></div>
+    
+    
+        <form id="consentForm" action="" method="POST">
+            <p></p>
+            <fieldset>
+                <legend>Give consent to embark on this epic adventure!</legend>
+                <p>
+                    <input type="checkbox" id="consentCheckbox" name="consentCheckbox">
+                    <label for="consentCheckbox">I, Kobe, hereby consent to share my name and LinkedIn profile picture<br/>to be used to personalize this entertaining adventure.</label>
+                </p>
+                <button type="submit">Submit</button>
+            </fieldset>
+        </form>
+</div>
+<div class="container" id="lastText" style="display: none;">
+    <div class="wrapper">
+    <div style="text-align: center">
+        <p>Use the arrow keys to move Kobe to his next adventure in retail land.</p>
+    </div>
+    <div>
+        <div id="game-container">
+            <div id="character" class="character"></div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<audio id="backgroundMusic">
+    <source src="assets/sound/musicIntro.mp3" type="audio/mpeg" loop>
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+    document.getElementById('startText').addEventListener('click', function() {
+        document.getElementById('startGame').style.display = 'none'; // Hide the start text
+        document.getElementById('nextText').style.display = 'block'; // Show the next text
+        var backgroundMusic = document.getElementById('backgroundMusic');
+        backgroundMusic.play(); // Start playing the background music
+    });
+</script>
+
+<script>
+    document.getElementById('consentForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        var consentCheckbox = document.getElementById('consentCheckbox');
+        if (consentCheckbox.checked) {
+            document.getElementById('nextText').style.display = 'none'; // Hide the start text
+            document.getElementById('lastText').style.display = 'block'; // Show the next text
+        } else {
+            window.location.href = 'noconsent.html'; // Redirect to non-personalized game if checkbox is not checked
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const character = document.getElementById('character');
+        let posX = 0;
+        let posY = 0;
+
+        function updateCharacterPosition() {
+            character.style.left = posX * 40 + 'px';
+            character.style.top = posY * 40 + 'px';
+            checkCellForRedirect(posX, posY);
+        }
+
+        function checkCellForRedirect(x, y) {
+            if (x === 6 && y === 7) { // Check for coordinates (3, 2)
+                window.location.href = 'games/coffeeCatcher.html'; // Redirect to CoffeeCatcher Game
+            };
+            if (x === 7 && y === 10) { // Check for coordinates (3, 2)
+                window.location.href = 'games/consentMan.html'; // Redirect to CoffeeCatcher Game
+            };
+        }
+
+        document.addEventListener('keydown', function (event) {
+            switch (event.key) {
+                case 'ArrowUp':
+                    if (posY > 0) posY--;
+                    break;
+                case 'ArrowDown':
+                    if (posY < 14) posY++; // Adjusted to fit the 15x15 grid
+                    break;
+                case 'ArrowLeft':
+                    if (posX > 0) posX--;
+                    break;
+                case 'ArrowRight':
+                    if (posX < 14) posX++; // Adjusted to fit the 15x15 grid
+                    break;
+            }
+            updateCharacterPosition();
+        });
+    });
+</script>
+
+</body>
+</html>
