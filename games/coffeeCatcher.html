@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catch'em Game</title>
+  <style>
+    body {
+      background: black;
+      color: #f07e13; 
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    .container {
+      display:grid;
+    }
+
+    #gameContainer {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #gameCanvas {
+      display: block;
+      background: white;
+      margin: 0 auto;
+      transition: border-color 0.5s ease; /* Transition effect for the border color change */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+  <div id="gameContainer">
+    <pre>
+      _____       __  __             _____      _       _                    ____   __  __ _             _____ _                     
+      / ____|     / _|/ _|           / ____|    | |     | |              _   / __ \ / _|/ _(_)           / ____| |                    
+     | |     ___ | |_| |_ ___  ___  | |     __ _| |_ ___| |__   ___ _ __(_) | |  | | |_| |_ _  ___ ___  | |    | |__   __ _  ___  ___ 
+     | |    / _ \|  _|  _/ _ \/ _ \ | |    / _` | __/ __| '_ \ / _ \ '__|   | |  | |  _|  _| |/ __/ _ \ | |    | '_ \ / _` |/ _ \/ __|
+     | |___| (_) | | | ||  __/  __/ | |___| (_| | || (__| | | |  __/ |   _  | |__| | | | | | | (_|  __/ | |____| | | | (_| | (_) \__ \
+      \_____\___/|_| |_| \___|\___|  \_____\__,_|\__\___|_| |_|\___|_|  (_)  \____/|_| |_| |_|\___\___|  \_____|_| |_|\__,_|\___/|___/
+                                                                                                                                      
+     </pre>
+    <p>Enter the vibrant world of Colruyt Group's office, where the scent of coffee fills the air and keyboards click in the background. As the newest team member, your task is clear: prevent coffee chaos! Maneuver through the maze-like corridors and bustling workspaces, saving mugs from spills and keeping order intact. Can you master the role of Coffee Catcher and preserve the office's pristine floors? Prepare for the caffeine-fueled challenge of "Coffee Catcher: Office Chaos"!</p>
+    <p><strong>Instructions:</strong> Use left and right arrow keys to move the player.</p>
+
+  </div>
+  <audio id="lifeLostSound" src="../assets/sound/pointLost.mp3"></audio>
+  <audio id="gameOverSound" src="../assets/sound/gameOver.mp3"></audio>
+  <canvas id="gameCanvas" width="600" height="400">Test test test</canvas>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const PLAYER_SIZE = 64;
+    const COFFEE_SIZE = 48;
+    const PLAYER_SPEED = 10;
+    const COFFEE_SPEED = 3;
+    const MAX_LIVES = 5;
+    const TARGET_SCORE = 5;
+    const BORDER_FLASH_COLOR = 'red'; // Color for the border flash
+    const BORDER_FLASH_DURATION = 2000; // Duration of the border flash in milliseconds
+
+    const playerImage = new Image();
+    playerImage.src = '../assets/img/charKobe64.png'; // Image source
+
+    const coffeeImage = new Image();
+    coffeeImage.src = '../assets/img/coffee.png'; // Image source
+
+    let playerX = canvas.width / 2 - PLAYER_SIZE / 2;
+    const playerY = canvas.height - PLAYER_SIZE;
+    let coffeeX = Math.random() * (canvas.width - COFFEE_SIZE);
+    let coffeeY = 0;
+    let score = 0;
+    let lives = MAX_LIVES;
+    let gameOver = false;
+    let gameWon = false;
+    let gameStarted = false;
+
+    const bgMusic = document.createElement('audio');
+    bgMusic.loop = true;
+    bgMusic.src = '../assets/sound/8bit-canon-giulio-fazio-main-version-30900-02-48 (1).mp3'; // Change this to the path of your audio file
+
+    // Event listener to play background music when canvas is clicked
+    canvas.addEventListener('click', () => {
+      playBackgroundMusic();
+    });
+
+    function playBackgroundMusic() {
+      // Play background music only if it's not already playing
+      if (bgMusic.paused) {
+        bgMusic.play()
+          .then(() => {
+            console.log('Background music started playing.');
+          })
+          .catch((error) => {
+            console.error('Error playing background music:', error);
+          });
+      }
+    }
+
+    function drawPlayer() {
+      ctx.drawImage(playerImage, playerX, playerY, PLAYER_SIZE, PLAYER_SIZE);
+    }
+
+    function drawCoffee() {
+      ctx.drawImage(coffeeImage, coffeeX, coffeeY, COFFEE_SIZE, COFFEE_SIZE);
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (!gameStarted) {
+        ctx.fillStyle = 'black';
+        ctx.font = '24px Arial';
+        ctx.fillText('Click to Start', canvas.width / 2 - 80, canvas.height / 2);
+        return;
+      }
+
+      drawPlayer();
+      drawCoffee();
+
+      ctx.fillStyle = 'black';
+      ctx.font = '24px Arial';
+      ctx.fillText(`Score: ${score}`, 10, 30);
+      ctx.fillText(`Lives: ${lives}`, canvas.width - 100, 30);
+
+      if (gameOver) {
+        ctx.fillText('Game Over', canvas.width / 2 - 70, canvas.height / 2 - 20);
+        ctx.fillText('Click to Retry', canvas.width / 2 - 80, canvas.height / 2 + 20);
+        bgMusic.pause()
+        document.getElementById('gameOverSound').play(); // Play game over sound
+        return;
+      }
+
+      if (lives <= 0) {
+        gameOver = true;
+      }
+
+      if (gameWon) {
+        ctx.fillText('Pfew. Well done!', canvas.width / 2 - 70, canvas.height / 2 - 20);
+        ctx.fillText('You helped avoid a coffeegate!', canvas.width / 2 - 80, canvas.height / 2 + 20);
+        bgMusic.pause()
+        document.getElementById('gameOverSound').play(); // Play game over sound
+        canvas.addEventListener('click', redirectToMap);
+        return;
+      }
+
+      if (score >= TARGET_SCORE) {
+        gameWon = true;
+      }
+
+      if (coffeeY + COFFEE_SIZE >= playerY && coffeeX >= playerX && coffeeX <= playerX + PLAYER_SIZE) {
+        score++;
+        coffeeX = Math.random() * (canvas.width - COFFEE_SIZE);
+        coffeeY = 0;
+      }
+
+      if (coffeeY + COFFEE_SIZE >= canvas.height) {
+        lives--; // Loses one life
+        coffeeX = Math.random() * (canvas.width - COFFEE_SIZE);
+        coffeeY = 0;
+        flashBorder(); // Flash the canvas border when a life is lost
+        document.getElementById('lifeLostSound').play(); // Play life lost sound
+      }
+
+      coffeeY += COFFEE_SPEED;
+
+      requestAnimationFrame(draw);
+    }
+
+    function movePlayer(direction) {
+      if (direction === 'left') {
+        playerX -= PLAYER_SPEED;
+        if (playerX < 0) {
+          playerX = 0;
+        }
+      } else if (direction === 'right') {
+        playerX += PLAYER_SPEED;
+        if (playerX + PLAYER_SIZE > canvas.width) {
+          playerX = canvas.width - PLAYER_SIZE;
+        }
+      }
+    }
+
+    function redirectToMap() {
+      window.location.href = 'map.html'; // Redirect to map.html
+    }
+
+    function flashBorder() {
+      canvas.style.borderColor = BORDER_FLASH_COLOR; // Change the border color
+      setTimeout(() => {
+        canvas.style.borderColor = 'black'; // Revert back to the original color after the specified duration
+      }, BORDER_FLASH_DURATION);
+    }
+
+    window.addEventListener('keydown', (event) => {
+      if (!gameStarted) return; // Prevent movement before game starts
+      if (event.key === 'ArrowLeft') {
+        movePlayer('left');
+      } else if (event.key === 'ArrowRight') {
+        movePlayer('right');
+      }
+    });
+
+    canvas.addEventListener('click', () => {
+      if (!gameStarted) {
+        gameStarted = true;
+        draw()
+      }
+      if (gameOver) {
+        score = 0;
+        lives = MAX_LIVES;
+        gameOver = false;
+        draw();
+      }
+      if (gameWon) {
+        draw();
+      }
+    });
+
+    // Initially draw the canvas with the "Click to Start" message
+    draw();
+  </script>
+</body>
+</html>

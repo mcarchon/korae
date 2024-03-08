@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grid Game</title>
+<style>
+    body {
+        background-color: black;
+        color: #f07e13;
+        font-family: "Courier New", Courier, monospace;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .wrapper {
+        display:grid;
+    }
+
+    #game-container {
+        width: 600px; /* Adjusted to fit the 15x15 grid */
+        height: 600px; /* Adjusted to fit the 15x15 grid */
+        border: 2px solid black;
+        position: relative;
+        background-image: url('../assets/img/background.png'); /* Path to your background image */
+        background-size: cover;
+    }
+
+    .character {
+        width: 40px;
+        height: 40px;
+        background-image: url('../assets/img/charKobe40.png'); /* Path to your background image */
+        position: absolute;
+    }
+</style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="container" style="text-align: center">
+        <p>Use the arrow keys to move Kobe to his next adventure in retail land.</p>
+    </div>
+    <div class="container">
+        <div id="game-container">
+            <div id="character" class="character"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const character = document.getElementById('character');
+        let posX = 0;
+        let posY = 0;
+
+        function updateCharacterPosition() {
+            character.style.left = posX * 40 + 'px';
+            character.style.top = posY * 40 + 'px';
+            checkCellForRedirect(posX, posY);
+        }
+
+        function checkCellForRedirect(x, y) {
+            if (x === 6 && y === 7) { // Check for coordinates (3, 2)
+                window.location.href = 'coffeeCatcher.html'; // Redirect to CoffeeCatcher Game
+            };
+            if (x === 7 && y === 10) { // Check for coordinates (3, 2)
+                window.location.href = 'consentMan.html'; // Redirect to CoffeeCatcher Game
+            };
+        }
+
+        document.addEventListener('keydown', function (event) {
+            switch (event.key) {
+                case 'ArrowUp':
+                    if (posY > 0) posY--;
+                    break;
+                case 'ArrowDown':
+                    if (posY < 14) posY++; // Adjusted to fit the 15x15 grid
+                    break;
+                case 'ArrowLeft':
+                    if (posX > 0) posX--;
+                    break;
+                case 'ArrowRight':
+                    if (posX < 14) posX++; // Adjusted to fit the 15x15 grid
+                    break;
+            }
+            updateCharacterPosition();
+        });
+    });
+</script>
+</body>
+</html>
